@@ -1,40 +1,38 @@
-const express = require("express");
-const bodyParser = require('body-parser');
-const routesV1 = require("./routes/v1");
+let usuario = {
+ nombre:'',
+ apellido: ''
+};
 
-const app = express();
+let respuesta = {
+ error: false,
+ codigo: 200,
+ mensaje: ''
+};
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-
-/*app.get('/', function(req, res) {
+const getUsuario = (req, res) => {
  respuesta = {
   error: false,
   codigo: 200,
-  mensaje: 'Punto de inicio'
+  mensaje: ''
  };
+ if(usuario.nombre === '' || usuario.apellido === '') {
+  respuesta = {
+   error: true,
+   codigo: 501,
+   mensaje: 'El usuario no ha sido creado'
+  };
+ } else {
+  respuesta = {
+   error: false,
+   codigo: 200,
+   mensaje: 'respuesta del usuario',
+   respuesta: usuario
+  };
+ }
  res.send(respuesta);
-});*/
+};
 
-app.use(function(req, res, next) {
- respuesta = {
-  error: true, 
-  codigo: 404, 
-  mensaje: 'URL no encontrada'
- };
- res.status(404).send(respuesta);
-});
-
-routesV1(app);
-
-app.listen(3000, () => {
- console.log("El servidor está inicializado en el puerto 3000");
-});
-
-
-/*
-app.post('/usuario', function (req, res) {
+const crearUsuario = (req, res) => {
  if(!req.body.nombre || !req.body.apellido) {
   respuesta = {
    error: true,
@@ -63,9 +61,9 @@ app.post('/usuario', function (req, res) {
  }
  
  res.send(respuesta);
-});
+};
 
-app.put('/usuario', function (req, res) {
+const actualizarUsuario = (req, res) => {
  if(!req.body.nombre || !req.body.apellido) {
   respuesta = {
    error: true,
@@ -94,9 +92,9 @@ app.put('/usuario', function (req, res) {
  }
  
  res.send(respuesta);
-});
+};
 
-app.delete('/usuario', function (req, res) {
+const eliminarUsuario = (req, res) => {
  if(usuario.nombre === '' || usuario.apellido === '') {
   respuesta = {
    error: true,
@@ -115,18 +113,12 @@ app.delete('/usuario', function (req, res) {
   };
  }
  res.send(respuesta);
-});
+};
 
-app.use(function(req, res, next) {
- respuesta = {
-  error: true, 
-  codigo: 404, 
-  mensaje: 'URL no encontrada'
- };
- res.status(404).send(respuesta);
-});
 
-app.listen(3000, () => {
- console.log("El servidor está inicializado en el puerto 3000");
-});
-*/
+module.exports = {
+  getUsuario,
+  crearUsuario,
+  actualizarUsuario,
+  eliminarUsuario
+};
